@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevTrack | Enterprise Workspace</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Toast Notifications -->
+    <div id="toast" class="toast hidden"><i class="fas fa-info-circle"></i> <span id="toast-msg"></span></div>
+
+    <!-- Auth View -->
+    <div id="auth-view" class="view-container active">
+        <div class="auth-wrapper">
+            <div class="auth-sidebar">
+                <div class="brand">
+                    <i class="fas fa-layer-group brand-icon"></i>
+                    <h2>DevTrack</h2>
+                </div>
+                <p>Enterprise Issue & Bug Tracking System. Built for scale, designed for speed.</p>
+                <div class="auth-feature-list">
+                    <div class="feature-item">
+                        <i class="fas fa-rocket"></i>
+                        <span>Lightning fast performance</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Enterprise-grade security</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Real-time analytics</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="auth-main">
+                <div class="auth-box">
+                    <h2 class="welcome-text">Welcome back</h2>
+                    <p class="subtitle">Please enter your details to access your workspace.</p>
+                    
+                    <div class="tabs">
+                        <button class="tab-btn active" onclick="switchAuthTab('login')">Login</button>
+                        <button class="tab-btn" onclick="switchAuthTab('register')">Register</button>
+                    </div>
+
+                    <!-- Login Form -->
+                    <form id="login-form" class="auth-form active" onsubmit="handleLogin(event)">
+                        <div class="input-group">
+                            <label>Email Address</label>
+                            <div class="input-icon-wrapper">
+                                <i class="fas fa-envelope input-icon"></i>
+                                <input type="email" id="login-email" required placeholder="you@example.com">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Password</label>
+                            <div class="input-icon-wrapper">
+                                <i class="fas fa-lock input-icon"></i>
+                                <input type="password" id="login-password" required placeholder="••••••••">
+                            </div>
+                        </div>
+                        <button type="submit" class="primary-btn full-width">Sign In</button>
+                    </form>
+
+                    <!-- Register Form -->
+                    <form id="register-form" class="auth-form" onsubmit="handleRegister(event)">
+                        <div class="input-group">
+                            <label>Full Name</label>
+                            <div class="input-icon-wrapper">
+                                <i class="fas fa-user input-icon"></i>
+                                <input type="text" id="register-name" required placeholder="John Doe">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Email Address</label>
+                            <div class="input-icon-wrapper">
+                                <i class="fas fa-envelope input-icon"></i>
+                                <input type="email" id="register-email" required placeholder="you@example.com">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Password</label>
+                            <div class="input-icon-wrapper">
+                                <i class="fas fa-lock input-icon"></i>
+                                <input type="password" id="register-password" required minlength="6" placeholder="At least 6 characters">
+                            </div>
+                        </div>
+                        <button type="submit" class="primary-btn full-width">Create Account</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Workspace -->
+    <div id="app-workspace" class="workspace-layout hidden">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-layer-group brand-icon"></i>
+                <h2>DevTrack</h2>
+            </div>
+            <div class="project-selector-wrapper" style="padding: 1rem 1.5rem; border-bottom: 1px solid var(--bg-surface-border);">
+                <select id="project-selector" onchange="handleProjectChange(this.value)" style="background:var(--bg-surface); border:1px solid var(--bg-surface-border); border-radius: 6px; color:var(--text-main); font-size:0.95rem; font-weight:500; outline:none; width:100%; padding: 0.5rem; cursor:pointer; overflow:hidden; text-overflow:ellipsis;">
+                    <option value="" style="background: var(--bg-surface); color: var(--text-main);">Select Project</option>
+                </select>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item" onclick="showNavView('projects')" id="btn-nav-projects" style="margin-bottom:1rem; justify-content:center; border:1px dashed var(--primary); color: white;">
+                    <i class="fas fa-plus"></i>
+                    <span>Manage Projects</span>
+                </a>
+                <div id="project-dependent-nav" class="hidden">
+                    <div class="nav-section">MAIN</div>
+                    <a href="#" class="nav-item active" onclick="showNavView('dashboard')">
+                        <i class="fas fa-chart-pie"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#" class="nav-item" onclick="showNavView('all-issues')">
+                        <i class="fas fa-list-check"></i>
+                        <span>All Issues</span>
+                    </a>
+                    <a href="#" class="nav-item" onclick="showNavView('activity')">
+                        <i class="fas fa-bolt"></i>
+                        <span>Activity</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section" style="margin-top:2rem">PREFERENCES</div>
+                <a href="#" class="nav-item" onclick="showNavView('settings')">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="nav-item logout-btn" onclick="handleLogout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="icon-btn mobile-menu-btn" onclick="toggleMobileMenu()"><i class="fas fa-bars"></i></button>
+                    <div class="header-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="global-search-input" placeholder="Search issues..." oninput="handleGlobalSearch(this.value)" onblur="setTimeout(() => closeSearchDropdown(), 200)" onfocus="handleGlobalSearch(this.value)">
+                        <div id="search-dropdown" class="search-dropdown hidden">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <div class="user-profile">
+                        <div class="avatar" id="user-avatar">U</div>
+                        <span id="user-greeting">User</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Projects View -->
+            <div id="nav-projects" class="nav-content-pane hidden centered-view">
+                <div class="dashboard-scrollable">
+                    <div class="dashboard-header-title">
+                        <div>
+                            <h1>Projects</h1>
+                            <p class="text-muted">Manage your collaborative workspaces.</p>
+                        </div>
+                        <button class="primary-btn" onclick="openNewProjectModal()">
+                            <i class="fas fa-plus"></i> New Project
+                        </button>
+                    </div>
+                    <div id="projects-grid" style="width:100%; max-width:900px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:1.5rem;">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div id="nav-dashboard" class="nav-content-pane hidden">
+                <div class="dashboard-scrollable">
+                    <div class="dashboard-header-title">
+                        <div>
+                            <h1>Project Overview</h1>
+                            <p class="text-muted">Track, manage, and resolve bugs effectively.</p>
+                        </div>
+                        <div style="display:flex; gap:1rem; align-items:center;">
+                            <select id="dashboard-priority-filter" onchange="handlePriorityFilter(this.value)" style="width:auto; padding:0.5rem 1rem; cursor:pointer;">
+                                <option value="ALL">All Priorities</option>
+                                <option value="CRITICAL">Critical Priority</option>
+                                <option value="HIGH">High Priority</option>
+                                <option value="MEDIUM">Medium Priority</option>
+                                <option value="LOW">Low Priority</option>
+                            </select>
+                            <button class="primary-btn" onclick="openNewIssueModal()">
+                                <i class="fas fa-plus"></i> Create Issue
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- KPI Statistics -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon bg-blue"><i class="fas fa-tasks"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="stat-total">0</span>
+                                <span class="stat-label">Total Issues</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon bg-yellow"><i class="fas fa-spinner"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="stat-open">0</span>
+                                <span class="stat-label">Open / In Progress</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon bg-green"><i class="fas fa-check-circle"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="stat-resolved">0</span>
+                                <span class="stat-label">Resolved</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon bg-red"><i class="fas fa-fire"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="stat-critical">0</span>
+                                <span class="stat-label">Critical Priority</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kanban Board -->
+                    <div class="kanban-wrapper">
+                        <div class="kanban-board">
+                            <!-- Open Column -->
+                            <div class="kanban-col">
+                                <div class="col-header">
+                                    <h3><i class="fas fa-circle-notch text-blue"></i> Open</h3>
+                                    <span class="issue-count" id="count-OPEN">0</span>
+                                </div>
+                                <div class="issue-list" id="list-OPEN"></div>
+                            </div>
+
+                            <!-- In Progress Column -->
+                            <div class="kanban-col">
+                                <div class="col-header">
+                                    <h3><i class="fas fa-spinner fa-spin text-yellow"></i> In Progress</h3>
+                                    <span class="issue-count" id="count-IN_PROGRESS">0</span>
+                                </div>
+                                <div class="issue-list" id="list-IN_PROGRESS"></div>
+                            </div>
+
+                            <!-- Resolved Column -->
+                            <div class="kanban-col">
+                                <div class="col-header">
+                                    <h3><i class="fas fa-check-circle text-green"></i> Resolved</h3>
+                                    <span class="issue-count" id="count-RESOLVED">0</span>
+                                </div>
+                                <div class="issue-list" id="list-RESOLVED"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- All Issues Content -->
+            <div id="nav-all-issues" class="nav-content-pane hidden">
+                <div class="dashboard-scrollable">
+                    <div class="dashboard-header-title">
+                        <div>
+                            <h1>All Issues</h1>
+                            <p class="text-muted">A comprehensive list of all tickets.</p>
+                        </div>
+                        <select id="all-issues-priority-filter" onchange="handlePriorityFilter(this.value)" style="width:auto; padding:0.5rem 1rem; cursor:pointer;">
+                            <option value="ALL">All Priorities</option>
+                            <option value="CRITICAL">Critical Priority</option>
+                            <option value="HIGH">High Priority</option>
+                            <option value="MEDIUM">Medium Priority</option>
+                            <option value="LOW">Low Priority</option>
+                        </select>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="issue-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Status</th>
+                                    <th>Priority</th>
+                                    <th>Severity</th>
+                                    <th>Reporter</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-issues-body">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Content -->
+            <div id="nav-activity" class="nav-content-pane hidden centered-view">
+                <div class="dashboard-scrollable">
+                    <div class="dashboard-header-title">
+                        <div>
+                            <h1>Global Activity Feed</h1>
+                            <p class="text-muted">Real-time audit log of all system actions.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="global-activity-container panel">
+                        <div class="activity-timeline" id="global-activity-list">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Content -->
+            <div id="nav-settings" class="nav-content-pane hidden centered-view">
+                <div class="dashboard-scrollable">
+                    <div class="dashboard-header-title">
+                        <div>
+                            <h1>Account Settings</h1>
+                            <p class="text-muted">Manage your personal preferences.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-container panel settings-panel">
+                        <form id="settings-form" onsubmit="event.preventDefault(); handleUpdateSettings(event)">
+                            <div class="input-group" style="margin-bottom: 1.5rem">
+                                <label>Email Address</label>
+                                <input type="email" id="settings-email" disabled style="opacity: 0.7">
+                                <span class="text-muted" style="font-size:0.75rem">Email cannot be changed.</span>
+                            </div>
+                            <div class="input-group" style="margin-bottom: 2rem">
+                                <label>Full Name</label>
+                                <input type="text" id="settings-name" required>
+                            </div>
+                            <button type="submit" class="primary-btn full-width">Save Changes</button>
+                        </form>
+                        
+                        <hr style="margin: 2rem 0; border: none; border-top: 1px solid var(--bg-surface-border);">
+                        
+                        <div class="danger-zone" style="border: 1px solid var(--error-bg); border-radius: 8px; padding: 1.5rem;">
+                            <h3 class="text-red" style="margin-bottom: 0.5rem;"><i class="fas fa-exclamation-triangle"></i> Danger Zone</h3>
+                            <p class="text-muted" style="margin-bottom: 1.5rem; font-size: 0.9rem;">
+                                Permanently delete your account and all associated data. This action cannot be undone.
+                            </p>
+                            <button class="primary-btn" style="background: var(--error-bg); color: var(--error-text);" onclick="openDeleteAccountModal()">Delete Account</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- New Issue Modal -->
+    <div id="issue-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus-circle"></i> Create New Issue</h3>
+                <button class="icon-btn close-btn" onclick="closeNewIssueModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="issue-form" onsubmit="handleCreateIssue(event)">
+                <div class="modal-body">
+                    <div class="input-group">
+                        <label>Issue Title</label>
+                        <input type="text" id="issue-title" required placeholder="e.g., Application crashes on login">
+                    </div>
+                    <div class="input-group">
+                        <label>Description</label>
+                        <textarea id="issue-desc" rows="4" required placeholder="Steps to reproduce, expected behavior..."></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label>Priority</label>
+                            <select id="issue-priority">
+                                <option value="LOW">Low</option>
+                                <option value="MEDIUM">Medium</option>
+                                <option value="HIGH">High</option>
+                                <option value="CRITICAL">Critical</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Severity</label>
+                            <select id="issue-severity">
+                                <option value="MINOR">Minor</option>
+                                <option value="MAJOR">Major</option>
+                                <option value="CRITICAL">Critical</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="secondary-btn" onclick="closeNewIssueModal()">Cancel</button>
+                    <button type="submit" class="primary-btn">Create Issue</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Issue Details Modal -->
+    <div id="details-modal" class="modal hidden">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3 id="detail-header-id"><i class="fas fa-ticket-alt"></i> DEV-X</h3>
+                <button class="icon-btn close-btn" onclick="closeDetailsModal()"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <!-- Graphical Stepper -->
+            <div class="lifecycle-stepper" id="detail-stepper">
+                <!-- Populated by JS -->
+            </div>
+            
+            <div class="details-layout">
+                <!-- Left Column: Details & Comments -->
+                <div class="details-main">
+                    <h2 id="detail-title">Loading...</h2>
+                    <div class="detail-tags" id="detail-tags">
+                        <!-- Badges go here -->
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h4>Description</h4>
+                        <div class="detail-desc" id="detail-desc"></div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h4>Comments</h4>
+                        <div class="comments-list" id="detail-comments">
+                            <!-- Comments go here -->
+                        </div>
+                        <form id="comment-form" onsubmit="handleAddComment(event)" class="comment-input-area">
+                            <input type="hidden" id="detail-issue-id">
+                            <input type="text" id="new-comment" required placeholder="Write a comment...">
+                            <button type="submit" class="primary-btn"><i class="fas fa-paper-plane"></i></button>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Right Column: Meta & Actions -->
+                <div class="details-sidebar">
+                    <div class="meta-box">
+                        <div class="input-group">
+                            <label>Status</label>
+                            <select id="detail-status" onchange="handleStatusChange(this.value)">
+                                <option value="OPEN">Open</option>
+                                <option value="IN_PROGRESS">In Progress</option>
+                                <option value="TESTING">Testing</option>
+                                <option value="RESOLVED">Resolved</option>
+                                <option value="CLOSED">Closed</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-group" style="margin-top: 1rem;">
+                            <label>Reporter</label>
+                            <div class="user-chip" id="detail-reporter">
+                                <div class="avatar small">U</div> User Name
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-section" style="margin-top: 1.5rem;">
+                        <h4>Activity Log</h4>
+                        <div class="activity-timeline" id="detail-activity">
+                            <!-- Logs go here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Project Modal -->
+    <div id="new-project-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-layer-group"></i> Create New Project</h3>
+                <button class="icon-btn close-btn" onclick="closeNewProjectModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="new-project-form" onsubmit="handleCreateProject(event)">
+                <div class="modal-body">
+                    <div class="input-group">
+                        <label>Project Name</label>
+                        <input type="text" id="project-name" required placeholder="e.g. Website Redesign">
+                    </div>
+                    <div class="input-group">
+                        <label>Description</label>
+                        <textarea id="project-desc" rows="3" placeholder="Brief description of the project..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="secondary-btn" onclick="closeNewProjectModal()">Cancel</button>
+                    <button type="submit" class="primary-btn">Create Project</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Account Modal -->
+    <div id="delete-account-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header" style="border-bottom-color: var(--error-bg);">
+                <h3 class="text-red"><i class="fas fa-exclamation-triangle"></i> Delete Account</h3>
+                <button class="icon-btn close-btn" onclick="closeDeleteAccountModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="delete-account-form" onsubmit="handleDeleteAccount(event)">
+                <div class="modal-body">
+                    <p class="text-muted" style="margin-bottom: 1.5rem; font-size: 0.9rem;">
+                        This will permanently delete your account, projects, and issues. Please confirm by entering your password.
+                    </p>
+                    <div class="input-group">
+                        <label>Password</label>
+                        <input type="password" id="delete-account-password" required>
+                    </div>
+                </div>
+                <div class="modal-footer" style="background: var(--bg-surface);">
+                    <button type="button" class="secondary-btn" onclick="closeDeleteAccountModal()">Cancel</button>
+                    <button type="submit" class="primary-btn" style="background: var(--error-bg); color: var(--error-text);">Permanently Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: devtrack-backend
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/devtrack_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: M7@02s2004 # TODO: Change this to your local MySQL password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update # Automatically creates/updates tables based on our Entities
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+
+jwt:
+  secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970 # Ensure this is a 256-bit key
+  expiration: 86400000 # 24 hours in milliseconds
+
+server:
+  port: 8081
+  error:
+    include-message: always
